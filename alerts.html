@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Alerts | Sustainable City</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Small page-specific improvements */
+        .alert-tools {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .alert-filter {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .alert-filter.active {
+            background: var(--g);
+            color: white;
+            border-color: var(--g);
+        }
+
+        .alert {
+            justify-content: space-between;
+        }
+
+        .alert-left {
+            min-width: 0;
+        }
+
+        .alert-left b {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .alert-left p {
+            margin: 4px 0;
+            color: var(--soft);
+        }
+
+        .alert-left small {
+            color: var(--muted);
+        }
+
+        .alert-empty {
+            text-align: center;
+            padding: 28px;
+            color: var(--muted);
+        }
+
+        .alert-summary {
+            margin-bottom: 16px;
+        }
+
+        .alert-summary b {
+            font-size: 18px;
+        }
+
+        .alert-action {
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            padding: 7px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .alert-action:hover {
+            background: var(--bg);
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside>
+
+        <div class="logo">SC</div>
+
+        <h2>Sustainable City</h2>
+
+        <p class="side-sub">
+            Smart city monitoring
+        </p>
+
+
+        <nav>
+
+            <a href="index.html">
+                ⌂ Dashboard
+            </a>
+
+            <a href="analytics.html">
+                ▥ Analytics
+            </a>
+
+            <a href="map.html">
+                ◉ City Map
+            </a>
+
+            <a href="recommendations.html">
+                ✦ Recommendations
+            </a>
+
+            <a class="active" href="alerts.html">
+                ⚠ Alerts
+            </a>
+
+            <a href="reports.html">
+                ♧ Citizen Reports
+            </a>
+
+            <a href="goals.html">
+                ◎ SDG Goals
+            </a>
+
+            <a href="settings.html">
+                ⚙ Settings
+            </a>
+
+        </nav>
+
+
+        <div class="side-note">
+
+            <b>Alert Center</b>
+            <br>
+
+            Indicators below the prototype threshold
+            are shown here.
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main>
+
+        <header>
+
+            <div>
+
+                <span class="label">
+                    ALERT CENTER
+                </span>
+
+                <h1>
+                    Alerts & warnings
+                </h1>
+
+                <p>
+                    Monitor environmental indicators that require attention.
+                </p>
+
+            </div>
+
+
+            <button
+                class="plan"
+                id="clear">
+
+                Clear notifications
+
+            </button>
+
+        </header>
+
+
+        <!-- SUMMARY -->
+
+        <section
+            id="summary"
+            class="notice alert-summary">
+
+        </section>
+
+
+        <!-- FILTERS -->
+
+        <section class="alert-tools">
+
+            <button
+                class="alert-filter active"
+                data-filter="all">
+
+                All
+
+            </button>
+
+
+            <button
+                class="alert-filter"
+                data-filter="critical">
+
+                Critical
+
+            </button>
+
+
+            <button
+                class="alert-filter"
+                data-filter="warning">
+
+                Warnings
+
+            </button>
+
+
+            <button
+                class="alert-filter"
+                data-filter="good">
+
+                Information
+
+            </button>
+
+        </section>
+
+
+        <!-- ALERT LIST -->
+
+        <section
+            id="alerts"
+            class="grid">
+
+        </section>
+
+
+        <footer>
+            Academic prototype • Sustainable City Dashboard
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script src="app.js"></script>
+
+
+<script>
+
+    const alertsContainer =
+        document.getElementById('alerts');
+
+    const summary =
+        document.getElementById('summary');
+
+    let currentFilter = 'all';
+
+
+    /*
+     * Generate alerts from the existing
+     * sustainability threshold system.
+     */
+
+    function getAllAlerts() {
+
+        const threshold =
+            thresholdAlerts();
+
+        const notifications =
+            store.get('notifications', []).map(x => ({
+                type: x.type || 'warning',
+                title: x.title,
+                text: x.text,
+                meta: x.time,
+                notification: true
+            }));
+
+
+        const monitoring = {
+            type: 'good',
+            title: 'Monitoring active',
+            text:
+                'All dashboard indicators are being evaluated against the prototype thresholds.',
+            meta:
+                'Current city: ' + city
+        };
+
+
+        return [
+            ...notifications,
+            ...threshold,
+            monitoring
+        ];
+
+    }
+
+
+    /*
+     * Create alert card
+     */
+
+    function card(x, index) {
+
+        let tagClass = 'green';
+
+        if (x.type === 'critical') {
+            tagClass = 'red';
+        }
+
+        else if (x.type === 'warning') {
+            tagClass = 'amber';
+        }
+
+
+        return `
+
+            <div class="panel alert ${x.type}">
+
+                <div class="alert-left">
+
+                    <b>
+                        ${esc(x.title)}
+                    </b>
+
+                    <p>
+                        ${esc(x.text)}
+                    </p>
+
+                    <small>
+                        ${esc(x.meta || 'Current city: ' + city)}
+                    </small>
+
+                    ${
+                        x.notification
+                        ? `
+                            <button
+                                class="alert-action"
+                                data-remove="${index}">
+                                Dismiss
+                            </button>
+                        `
+                        : ''
+                    }
+
+                </div>
+
+
+                <span class="tag ${tagClass}">
+
+                    ${x.type === 'good'
+                        ? 'Info'
+                        : x.type}
+
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+     * Render alerts
+     */
+
+    function renderAlerts() {
+
+        const all =
+            getAllAlerts();
+
+
+        let filtered = all;
+
+
+        if (currentFilter !== 'all') {
+
+            filtered =
+                all.filter(x =>
+                    x.type === currentFilter
+                );
+
+        }
+
+
+        /*
+         * Summary
+         */
+
+        const critical =
+            all.filter(x =>
+                x.type === 'critical'
+            ).length;
+
+
+        const warnings =
+            all.filter(x =>
+                x.type === 'warning'
+            ).length;
+
+
+        const notifications =
+            all.filter(x =>
+                x.notification
+            ).length;
+
+
+        summary.innerHTML = `
+
+            <b>${critical}</b> critical ·
+
+            <b>${warnings}</b> warnings ·
+
+            <b>${notifications}</b> notifications
+
+            — ${esc(city)}
+
+        `;
+
+
+        /*
+         * Empty state
+         */
+
+        if (!filtered.length) {
+
+            alertsContainer.innerHTML = `
+
+                <div class="panel alert-empty">
+
+                    No alerts in this category.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        alertsContainer.innerHTML =
+            filtered
+                .map((x, i) => card(x, i))
+                .join('');
+
+    }
+
+
+    /*
+     * Filter buttons
+     */
+
+    document
+        .querySelectorAll('.alert-filter')
+        .forEach(button => {
+
+            button.addEventListener(
+                'click',
+                () => {
+
+                    document
+                        .querySelectorAll('.alert-filter')
+                        .forEach(btn =>
+                            btn.classList.remove('active')
+                        );
+
+
+                    button.classList.add('active');
+
+
+                    currentFilter =
+                        button.dataset.filter;
+
+
+                    renderAlerts();
+
+                }
+            );
+
+        });
+
+
+    /*
+     * Dismiss notification
+     */
+
+    alertsContainer.addEventListener(
+        'click',
+        event => {
+
+            const button =
+                event.target.closest(
+                    '[data-remove]'
+                );
+
+
+            if (!button) return;
+
+
+            const index =
+                Number(button.dataset.remove);
+
+
+            const notifications =
+                store.get(
+                    'notifications',
+                    []
+                );
+
+
+            notifications.splice(index, 1);
+
+
+            store.set(
+                'notifications',
+                notifications
+            );
+
+
+            renderAlerts();
+
+        }
+    );
+
+
+    /*
+     * Clear all notifications
+     *
+     * This clears notifications generated by
+     * the dashboard, but keeps threshold alerts.
+     */
+
+    document
+        .getElementById('clear')
+        .onclick = () => {
+
+            store.set(
+                'notifications',
+                []
+            );
+
+            renderAlerts();
+
+        };
+
+
+    /*
+     * Initial display
+     */
+
+    renderAlerts();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Citizen Reports | Sustainable City</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside>
+
+        <div class="logo">
+            SC
+        </div>
+
+        <h2>
+            Sustainable City
+        </h2>
+
+        <p class="side-sub">
+            Smart city monitoring
+        </p>
+
+
+        <nav>
+
+            <a href="index.html">
+                ⌂ Dashboard
+            </a>
+
+            <a href="analytics.html">
+                ▥ Analytics
+            </a>
+
+            <a href="map.html">
+                ◉ City Map
+            </a>
+
+            <a href="recommendations.html">
+                ✦ Recommendations
+            </a>
+
+            <a href="alerts.html">
+                ⚠ Alerts
+            </a>
+
+            <a
+                href="reports.html"
+                class="active"
+            >
+                ♧ Citizen Reports
+            </a>
+
+            <a href="goals.html">
+                ◎ SDG Goals
+            </a>
+
+            <a href="settings.html">
+                ⚙ Settings
+            </a>
+
+        </nav>
+
+
+        <div class="side-note">
+            Citizen participation helps identify local
+            environmental problems.
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main>
+
+
+        <!-- HEADER -->
+
+        <header>
+
+            <div>
+
+                <span class="label">
+                    COMMUNITY PARTICIPATION
+                </span>
+
+                <h1>
+                    Citizen Reports
+                </h1>
+
+                <p>
+                    Report environmental issues in your area
+                    and help the city identify local problems.
+                </p>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             REPORT FORM
+             ================================================= -->
+
+        <section class="panel">
+
+            <div class="panel-head">
+
+                <div>
+
+                    <span class="label">
+                        REPORT AN ISSUE
+                    </span>
+
+                    <h2>
+                        What did you notice?
+                    </h2>
+
+                </div>
+
+                <span class="tag blue">
+                    Community input
+                </span>
+
+            </div>
+
+
+            <p class="muted">
+                Submit a simple environmental report.
+                Reports are stored through the Flask backend in a local SQLite database.
+            </p>
+
+
+
+            <form
+                id="reportForm"
+                style="margin-top:20px"
+            >
+
+
+                <!-- ISSUE TYPE -->
+
+                <div class="controls">
+
+                    <label>
+
+                        Issue type
+
+                        <select
+                            id="issueType"
+                            required
+                        >
+
+                            <option value="">
+                                Select an issue
+                            </option>
+
+                            <option value="Waste">
+                                Waste / litter
+                            </option>
+
+                            <option value="Air Quality">
+                                Air quality
+                            </option>
+
+                            <option value="Water">
+                                Water wastage / pollution
+                            </option>
+
+                            <option value="Green Space">
+                                Green space
+                            </option>
+
+                            <option value="Transportation">
+                                Traffic / transportation
+                            </option>
+
+                            <option value="Energy">
+                                Energy / street lighting
+                            </option>
+
+                            <option value="Other">
+                                Other environmental issue
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+
+                    <!-- AREA -->
+
+                    <label>
+
+                        Area
+
+                        <select
+                            id="reportArea"
+                            required
+                        >
+
+                            <option value="">
+                                Select an area
+                            </option>
+
+                            <option>
+                                North Zone
+                            </option>
+
+                            <option>
+                                Central Zone
+                            </option>
+
+                            <option>
+                                East Zone
+                            </option>
+
+                            <option>
+                                West Zone
+                            </option>
+
+                            <option>
+                                South Zone
+                            </option>
+
+                        </select>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- TITLE -->
+
+                <label
+                    style="
+                        display:block;
+                        margin-top:14px;
+                    "
+                >
+
+                    Short title
+
+                    <input
+                        id="reportTitle"
+                        type="text"
+                        maxlength="60"
+                        placeholder="Example: Overflowing waste bin"
+                        required
+                    >
+
+                </label>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <label
+                    style="
+                        display:block;
+                        margin-top:14px;
+                    "
+                >
+
+                    Description
+
+                    <textarea
+                        id="reportDescription"
+                        rows="5"
+                        maxlength="300"
+                        placeholder="Briefly describe what you observed..."
+                        required
+                    ></textarea>
+
+                </label>
+
+
+
+                <!-- SUBMIT -->
+
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:12px;
+                        margin-top:15px;
+                        flex-wrap:wrap;
+                    "
+                >
+
+                    <button
+                        type="submit"
+                        class="primary"
+                    >
+                        Submit report
+                    </button>
+
+
+                    <span
+                        id="submitMessage"
+                        class="muted"
+                    ></span>
+
+                    <span id="backendStatus" class="tag blue">Checking backend…</span>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+             REPORT STATISTICS
+             ================================================= -->
+
+        <div
+            class="grid g3"
+            style="margin-top:15px"
+        >
+
+
+            <section class="panel stat">
+
+                <small>
+                    Total reports
+                </small>
+
+                <div class="big-number">
+                    <b id="totalReports">
+                        0
+                    </b>
+                </div>
+
+            </section>
+
+
+
+            <section class="panel stat">
+
+                <small>
+                    Open reports
+                </small>
+
+                <div class="big-number">
+                    <b id="openReports">
+                        0
+                    </b>
+                </div>
+
+            </section>
+
+
+
+            <section class="panel stat">
+
+                <small>
+                    Resolved
+                </small>
+
+                <div class="big-number">
+                    <b id="resolvedReports">
+                        0
+                    </b>
+                </div>
+
+            </section>
+
+        </div>
+
+
+
+        <!-- =================================================
+             RECENT REPORTS
+             ================================================= -->
+
+        <section
+            class="panel"
+            style="margin-top:15px"
+        >
+
+            <div class="panel-head">
+
+                <div>
+
+                    <span class="label">
+                        COMMUNITY ACTIVITY
+                    </span>
+
+                    <h2>
+                        Recent reports
+                    </h2>
+
+                </div>
+
+
+                <select id="reportFilter">
+
+                    <option value="all">
+                        All reports
+                    </option>
+
+                    <option value="open">
+                        Open
+                    </option>
+
+                    <option value="review">
+                        Under review
+                    </option>
+
+                    <option value="resolved">
+                        Resolved
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                id="reportsList"
+                class="recommend"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             HOW IT WORKS
+             ================================================= -->
+
+        <section
+            class="panel"
+            style="margin-top:15px"
+        >
+
+            <div class="panel-head">
+
+                <div>
+
+                    <span class="label">
+                        REPORT WORKFLOW
+                    </span>
+
+                    <h2>
+                        How citizen reporting works
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="cycle">
+
+
+                <div>
+
+                    <b>01</b>
+
+                    <strong>
+                        Report
+                    </strong>
+
+                    <small>
+                        Citizen submits an issue
+                    </small>
+
+                </div>
+
+
+                <i>→</i>
+
+
+                <div>
+
+                    <b>02</b>
+
+                    <strong>
+                        Review
+                    </strong>
+
+                    <small>
+                        Issue is reviewed
+                    </small>
+
+                </div>
+
+
+                <i>→</i>
+
+
+                <div>
+
+                    <b>03</b>
+
+                    <strong>
+                        Action
+                    </strong>
+
+                    <small>
+                        Appropriate action is planned
+                    </small>
+
+                </div>
+
+
+                <i>→</i>
+
+
+                <div>
+
+                    <b>04</b>
+
+                    <strong>
+                        Resolve
+                    </strong>
+
+                    <small>
+                        Status is updated
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <footer>
+            Sustainable City Dashboard · Academic Prototype
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+
+<script src="app.js"></script>
+
+
+<script>
+/* =========================================================
+   CITIZEN REPORTS - FLASK + SQLITE BACKEND
+   ========================================================= */
+
+const API_BASE = '/api';
+
+const reportState = {
+    reports: [],
+    filter: 'all'
+};
+
+
+/* ---------------------------------------------------------
+   HELPERS
+   --------------------------------------------------------- */
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+
+function formatDate(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString();
+}
+
+
+function statusTag(status) {
+    if (status === 'resolved') {
+        return '<span class="tag green">Resolved</span>';
+    }
+
+    if (status === 'review') {
+        return '<span class="tag amber">Under review</span>';
+    }
+
+    return '<span class="tag red">Open</span>';
+}
+
+
+function setBackendStatus(connected, message) {
+    const element = document.getElementById('backendStatus');
+    if (!element) return;
+
+    element.textContent = message;
+    element.className = connected
+        ? 'tag green'
+        : 'tag red';
+}
+
+
+/* ---------------------------------------------------------
+   LOAD REPORTS FROM FLASK API
+   --------------------------------------------------------- */
+
+async function loadReports() {
+    try {
+        const response = await fetch(
+            `${API_BASE}/reports?city=${encodeURIComponent(city)}`,
+            { cache: 'no-store' }
+        );
+
+        if (!response.ok) {
+            throw new Error('Could not load reports.');
+        }
+
+        reportState.reports = await response.json();
+        setBackendStatus(true, 'Backend connected');
+        renderReports();
+    } catch (error) {
+        reportState.reports = [];
+        setBackendStatus(false, 'Backend unavailable');
+        renderReports();
+
+        const message = document.getElementById('submitMessage');
+        message.textContent = 'Could not connect to the Flask backend. Start app.py and refresh.';
+        message.style.color = 'var(--red)';
+    }
+}
+
+
+/* ---------------------------------------------------------
+   RENDER REPORTS
+   --------------------------------------------------------- */
+
+function renderReports() {
+    const reports = reportState.reports;
+    const filter = reportState.filter;
+
+    const filtered = reports.filter(report => {
+        if (filter === 'all') return true;
+        return report.status === filter;
+    });
+
+    document.getElementById('totalReports').textContent = reports.length;
+    document.getElementById('openReports').textContent =
+        reports.filter(report => report.status === 'open').length;
+    document.getElementById('resolvedReports').textContent =
+        reports.filter(report => report.status === 'resolved').length;
+
+    if (filtered.length === 0) {
+        document.getElementById('reportsList').innerHTML = `
+            <div style="padding:25px 0;text-align:center;">
+                <strong>No reports found</strong>
+                <p class="muted">
+                    Try another filter or submit a new environmental report.
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    document.getElementById('reportsList').innerHTML = filtered.map(report => `
+        <div
+            class="recommend"
+            style="padding:16px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:var(--surface);"
+        >
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:15px;flex-wrap:wrap;">
+                <div>
+                    <span class="label">${escapeHTML(report.type)}</span>
+                    <h3 style="margin:5px 0;font-size:14px;">
+                        ${escapeHTML(report.title)}
+                    </h3>
+                    <small style="color:var(--muted);">
+                        ${escapeHTML(report.area)} · ${escapeHTML(formatDate(report.created_at))}
+                    </small>
+                </div>
+                ${statusTag(report.status)}
+            </div>
+
+            <p style="margin:10px 0 0;">
+                ${escapeHTML(report.description)}
+            </p>
+
+            ${report.status !== 'resolved' ? `
+                <button
+                    class="plan report-status"
+                    data-id="${report.id}"
+                    style="margin-top:10px"
+                >
+                    ${report.status === 'open' ? 'Move to review' : 'Mark resolved'}
+                </button>
+            ` : `
+                <small style="display:block;margin-top:10px;color:var(--g2);font-weight:700;">
+                    ✓ Issue resolved
+                </small>
+            `}
+        </div>
+    `).join('');
+}
+
+
+/* ---------------------------------------------------------
+   SUBMIT REPORT TO FLASK API
+   --------------------------------------------------------- */
+
+document.getElementById('reportForm').addEventListener('submit', async event => {
+    event.preventDefault();
+
+    const type = document.getElementById('issueType').value;
+    const area = document.getElementById('reportArea').value;
+    const title = document.getElementById('reportTitle').value.trim();
+    const description = document.getElementById('reportDescription').value.trim();
+    const message = document.getElementById('submitMessage');
+
+    if (!type || !area || !title || !description) return;
+
+    message.textContent = 'Submitting…';
+    message.style.color = 'var(--soft)';
+
+    try {
+        const response = await fetch(`${API_BASE}/reports`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                city,
+                type,
+                area,
+                title,
+                description
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Could not submit the report.');
+        }
+
+        event.target.reset();
+        message.textContent = '✓ Report submitted successfully.';
+        message.style.color = 'var(--g2)';
+        setBackendStatus(true, 'Backend connected');
+
+        notify(
+            'New citizen report',
+            `${type} issue reported in ${area}.`,
+            'warning'
+        );
+
+        await loadReports();
+
+        setTimeout(() => {
+            message.textContent = '';
+        }, 3500);
+    } catch (error) {
+        message.textContent = error.message;
+        message.style.color = 'var(--red)';
+        setBackendStatus(false, 'Backend unavailable');
+    }
+});
+
+
+/* ---------------------------------------------------------
+   FILTER
+   --------------------------------------------------------- */
+
+document.getElementById('reportFilter').addEventListener('change', event => {
+    reportState.filter = event.target.value;
+    renderReports();
+});
+
+
+/* ---------------------------------------------------------
+   UPDATE STATUS THROUGH FLASK API
+   --------------------------------------------------------- */
+
+document.addEventListener('click', async event => {
+    const button = event.target.closest('.report-status');
+    if (!button) return;
+
+    const report = reportState.reports.find(
+        item => Number(item.id) === Number(button.dataset.id)
+    );
+
+    if (!report) return;
+
+    const nextStatus = report.status === 'open' ? 'review' : 'resolved';
+
+    button.disabled = true;
+    button.textContent = 'Updating…';
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/reports/${report.id}`,
+            {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: nextStatus })
+            }
+        );
+
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(result.error || 'Could not update report.');
+        }
+
+        await loadReports();
+    } catch (error) {
+        button.disabled = false;
+        button.textContent = nextStatus === 'review'
+            ? 'Move to review'
+            : 'Mark resolved';
+        setBackendStatus(false, 'Backend unavailable');
+    }
+});
+
+
+/* ---------------------------------------------------------
+   START
+   --------------------------------------------------------- */
+
+loadReports();
+</script>
+
+
+</body>
+
+</html>

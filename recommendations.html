@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Recommendations | Sustainable City</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside>
+
+        <div class="logo">
+            SC
+        </div>
+
+        <h2>
+            Sustainable City
+        </h2>
+
+        <p class="side-sub">
+            Smart city monitoring
+        </p>
+
+
+        <nav>
+
+            <a href="index.html">
+                ⌂ Dashboard
+            </a>
+
+            <a href="analytics.html">
+                ▥ Analytics
+            </a>
+
+            <a href="map.html">
+                ◉ City Map
+            </a>
+
+            <a
+                class="active"
+                href="recommendations.html"
+            >
+                ✦ Recommendations
+            </a>
+
+            <a href="alerts.html">
+                ⚠ Alerts
+            </a>
+
+            <a href="reports.html">
+                ♧ Citizen Reports
+            </a>
+
+            <a href="goals.html">
+                ◎ SDG Goals
+            </a>
+
+            <a href="settings.html">
+                ⚙ Settings
+            </a>
+
+        </nav>
+
+
+        <div class="side-note">
+            Prototype decision-support suggestions.
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main>
+
+
+        <!-- HEADER -->
+
+        <header>
+
+            <div>
+
+                <span class="label">
+                    ACTION PLANNER
+                </span>
+
+                <h1>
+                    Recommendations
+                </h1>
+
+                <p>
+                    Turn weak indicators into measurable
+                    improvement plans.
+                </p>
+
+            </div>
+
+
+            <select
+                id="filter"
+                aria-label="Filter recommendations"
+            >
+
+                <option>
+                    All areas
+                </option>
+
+            </select>
+
+        </header>
+
+
+
+        <!-- =================================================
+             ACTION OVERVIEW
+             ================================================= -->
+
+        <section
+            class="panel"
+            style="margin-bottom:16px"
+        >
+
+            <div class="panel-head">
+
+                <div>
+
+                    <span class="label">
+                        ACTION OVERVIEW
+                    </span>
+
+                    <h2>
+                        City improvement plan
+                    </h2>
+
+                </div>
+
+
+                <span
+                    class="tag blue"
+                    id="plannedCount"
+                >
+                    0 actions planned
+                </span>
+
+            </div>
+
+
+            <p>
+                Select improvement actions based on the city's
+                weakest sustainability indicators.
+            </p>
+
+
+            <div
+                class="grid g3"
+                style="margin-top:16px"
+            >
+
+
+                <!-- CURRENT SCORE -->
+
+                <div class="panel stat">
+
+                    <small>
+                        Current city score
+                    </small>
+
+                    <div class="big-number">
+
+                        <b id="currentScore">
+                            --
+                        </b>
+
+                        <small>
+                            /100
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PLANNED ACTIONS -->
+
+                <div class="panel stat">
+
+                    <small>
+                        Planned actions
+                    </small>
+
+                    <div class="big-number">
+
+                        <b id="actionCount">
+                            0
+                        </b>
+
+                        <small>
+                            /6
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PROJECTED SCORE -->
+
+                <div class="panel stat">
+
+                    <small>
+                        Projected score
+                    </small>
+
+                    <div class="big-number">
+
+                        <b id="projectedScore">
+                            --
+                        </b>
+
+                        <small>
+                            /100
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RECOMMENDATION CARDS
+             ================================================= -->
+
+        <section
+            id="actions"
+            class="cards"
+        ></section>
+
+
+
+        <!-- =================================================
+             IMPACT SIMULATOR
+             ================================================= -->
+
+        <section
+            class="panel"
+            style="margin-top:16px"
+            id="impact"
+        ></section>
+
+
+
+        <!-- =================================================
+             CO2 CALCULATOR
+             ================================================= -->
+
+        <section
+            class="panel"
+            style="margin-top:16px"
+        >
+
+            <div class="panel-head">
+
+                <div>
+
+                    <span class="label">
+                        ESTIMATION TOOL
+                    </span>
+
+                    <h2>
+                        Estimated CO₂ calculator
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <p class="muted">
+                Estimate a simplified monthly carbon impact
+                based on daily car travel and electricity use.
+            </p>
+
+
+            <div class="controls">
+
+
+                <label>
+
+                    Daily car trips
+
+                    <input
+                        id="trips"
+                        type="number"
+                        min="0"
+                        value="4"
+                    >
+
+                </label>
+
+
+
+                <label>
+
+                    Average km/trip
+
+                    <input
+                        id="km"
+                        type="number"
+                        min="0"
+                        value="8"
+                    >
+
+                </label>
+
+
+
+                <label>
+
+                    Monthly electricity (kWh)
+
+                    <input
+                        id="kwh"
+                        type="number"
+                        min="0"
+                        value="120"
+                    >
+
+                </label>
+
+            </div>
+
+
+            <button
+                class="primary"
+                id="calc"
+            >
+                Calculate
+            </button>
+
+
+            <div
+                id="co2"
+                class="big-number"
+            ></div>
+
+
+            <small>
+                Demo estimate only; real emissions depend on
+                vehicle, grid and travel data.
+            </small>
+
+        </section>
+
+
+
+        <!-- FOOTER -->
+
+        <footer>
+            Sustainable City Dashboard · Academic Prototype
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =======================================================
+     SHARED JAVASCRIPT
+     ======================================================= -->
+
+<script src="app.js"></script>
+
+
+
+<script>
+
+/* =========================================================
+   BASIC HELPERS
+   ========================================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
+const GAIN = 4;
+
+
+
+/* =========================================================
+   FILTER OPTIONS
+   ========================================================= */
+
+$('filter').insertAdjacentHTML(
+    'beforeend',
+
+    KEYS.map(
+        k => `<option>${IND[k]}</option>`
+    ).join('')
+);
+
+
+
+/* =========================================================
+   PLANNED ACTIONS
+   ========================================================= */
+
+const planned = () =>
+    store.get(
+        'planned_' + city,
+        []
+    );
+
+
+
+/* =========================================================
+   STATUS CLASS
+   ========================================================= */
+
+function statusClass(score) {
+
+    const levelData = level(score);
+
+    if (levelData.c === 'low') {
+        return 'red';
+    }
+
+    if (levelData.c === 'mid') {
+        return 'amber';
+    }
+
+    return 'green';
+
+}
+
+
+
+/* =========================================================
+   RENDER RECOMMENDATIONS
+   ========================================================= */
+
+function render() {
+
+    const s = cityScores();
+
+    const z = zones();
+
+    const p = planned();
+
+    const f = $('filter').value;
+
+
+
+    /* -----------------------------------------------------
+       ACTION OVERVIEW
+       ----------------------------------------------------- */
+
+    $('currentScore').textContent =
+        s.overall;
+
+    $('actionCount').textContent =
+        p.length;
+
+    $('plannedCount').textContent =
+        `${p.length} action${p.length === 1 ? '' : 's'} planned`;
+
+
+
+    /* -----------------------------------------------------
+       CREATE RECOMMENDATION CARDS
+       ----------------------------------------------------- */
+
+    $('actions').innerHTML =
+
+        [...KEYS]
+
+        .sort(
+            (a, b) =>
+                s[a] - s[b]
+        )
+
+        .filter(
+            k =>
+                f === 'All areas'
+                ||
+                IND[k] === f
+        )
+
+        .map(k => {
+
+
+            /* Find weakest zone */
+
+            const w = [...z]
+                .sort(
+                    (a, b) =>
+                        a[k] - b[k]
+                )[0];
+
+
+            const on =
+                p.includes(k);
+
+
+            const status =
+                level(s[k]);
+
+
+            return `
+
+                <article class="panel action">
+
+
+                    <div class="card-icon">
+                        ${ABBR[k]}
+                    </div>
+
+
+                    <div>
+
+                        <span class="label">
+                            ${IND[k].toUpperCase()}
+                        </span>
+
+
+                        <h2>
+                            ${ACTIONS[k].title}
+                        </h2>
+
+
+                        <small>
+                            Weakest: ${w.name}
+                            (${w[k]})
+                            ·
+                            City score ${s[k]}
+                        </small>
+
+
+                        <p>
+                            ${ACTIONS[k].text}
+                        </p>
+
+
+                        <span
+                            class="tag ${statusClass(s[k])}"
+                        >
+                            ${status.t}
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="plan${on ? ' done' : ''}"
+                        data-k="${k}"
+                        aria-pressed="${on}"
+                    >
+                        ${on ? '✓ Planned' : 'Mark planned'}
+                    </button>
+
+
+                </article>
+
+            `;
+
+        })
+
+        .join('');
+
+
+
+    /* -----------------------------------------------------
+       PROJECTED CITY SCORE
+       ----------------------------------------------------- */
+
+    const projected =
+        avg(
+
+            KEYS.map(
+
+                k =>
+
+                    Math.min(
+                        100,
+
+                        s[k]
+                        +
+                        (
+                            p.includes(k)
+                                ? GAIN
+                                : 0
+                        )
+                    )
+
+            )
+
+        );
+
+
+
+    $('projectedScore').textContent =
+        projected;
+
+
+
+    /* -----------------------------------------------------
+       IMPACT SIMULATOR
+       ----------------------------------------------------- */
+
+    $('impact').innerHTML = `
+
+        <div class="panel-head">
+
+
+            <div>
+
+                <span class="label">
+                    PROJECTED IMPACT
+                </span>
+
+                <h2>
+                    What could improve?
+                </h2>
+
+            </div>
+
+
+            <button
+                class="plan"
+                id="reset"
+            >
+                Reset plan
+            </button>
+
+
+        </div>
+
+
+
+        <div class="big-number">
+
+            ${s.overall}
+
+            →
+
+            ${projected}
+
+            <small>
+                /100 projected overall
+            </small>
+
+        </div>
+
+
+
+        <div class="bar">
+
+            <i
+                class="${level(projected).c}"
+                style="width:${projected}%"
+            ></i>
+
+        </div>
+
+
+
+        <p>
+
+            ${p.length}
+            of
+            ${KEYS.length}
+            improvement actions are currently planned.
+
+        </p>
+
+
+        <p>
+
+            <b>
+                Demo assumption:
+            </b>
+
+            Each planned indicator contributes
+            approximately +${GAIN} points to its
+            indicator score.
+
+        </p>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   BUTTON ACTIONS
+   ========================================================= */
+
+document.addEventListener(
+    'click',
+
+    e => {
+
+
+        /* ---------------------------------------------
+           MARK / UNMARK ACTION
+           --------------------------------------------- */
+
+        if (e.target.dataset.k) {
+
+            const p =
+                planned();
+
+            const k =
+                e.target.dataset.k;
+
+            const index =
+                p.indexOf(k);
+
+
+            if (index < 0) {
+
+                p.push(k);
+
+            }
+
+            else {
+
+                p.splice(
+                    index,
+                    1
+                );
+
+            }
+
+
+            store.set(
+                'planned_' + city,
+                p
+            );
+
+
+            render();
+
+
+            document
+                .querySelector(
+                    `[data-k="${k}"]`
+                )
+                ?.focus();
+
+        }
+
+
+
+        /* ---------------------------------------------
+           RESET PLAN
+           --------------------------------------------- */
+
+        if (
+            e.target.id === 'reset'
+        ) {
+
+            store.set(
+                'planned_' + city,
+                []
+            );
+
+            render();
+
+        }
+
+    }
+
+);
+
+
+
+/* =========================================================
+   FILTER
+   ========================================================= */
+
+$('filter').onchange =
+    render;
+
+
+
+/* =========================================================
+   CO2 CALCULATOR
+   ========================================================= */
+
+$('calc').onclick = () => {
+
+
+    const n = id =>
+        Math.max(
+            0,
+            +$(id).value || 0
+        );
+
+
+    const trips =
+        n('trips');
+
+    const km =
+        n('km');
+
+    const electricity =
+        n('kwh');
+
+
+    /*
+       Demo calculation:
+
+       Car emissions:
+       trips × km × 30 days × 0.18 kg/km
+
+       Electricity:
+       kWh × 0.7 kg/kWh
+
+       These are simplified prototype assumptions.
+    */
+
+    const kg =
+
+        trips
+        *
+        km
+        *
+        30
+        *
+        0.18
+
+        +
+
+        electricity
+        *
+        0.7;
+
+
+    $('co2').textContent =
+        Math.round(kg)
+        +
+        ' kg CO₂/month (demo estimate)';
+
+};
+
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+render();
+
+$('calc').onclick();
+
+</script>
+
+
+</body>
+
+</html>
